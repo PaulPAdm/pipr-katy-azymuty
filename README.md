@@ -5,6 +5,7 @@ klasy `Angle` (kąt w stopniach, minutach i sekundach kątowych) oraz `Azimuth`
 (kierunek na kompasie, azymut z zakresu `[0°, 360°)`).
 
 Rozwiązanie używa wyłącznie biblioteki standardowej Pythona (bez modułu `math`).
+Testy jednostkowe są napisane w `pytest`.
 
 ## Pliki
 
@@ -18,7 +19,8 @@ Rozwiązanie używa wyłącznie biblioteki standardowej Pythona (bez modułu `ma
 ## Uruchamianie testów
 
 ```bash
-python -m unittest -v
+pip install pytest
+pytest -v
 ```
 
 ## Przykład
