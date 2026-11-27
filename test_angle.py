@@ -1,4 +1,4 @@
-from angle import Angle
+from angle import Angle, from_seconds
 
 
 def test_default_is_zero():
@@ -23,7 +23,7 @@ def test_negative_angle():
 
 def test_to_seconds_and_from_seconds():
     assert Angle(30, 45, 50).to_seconds() == 110750
-    angle = Angle.from_seconds(5400)
+    angle = from_seconds(5400)
     assert str(angle) == '1°30\'00"'
     assert angle == Angle(minutes=90)
 

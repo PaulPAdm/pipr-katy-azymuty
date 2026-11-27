@@ -54,7 +54,7 @@ class Azimuth:
             difference = (self._seconds - other.to_seconds()) % FULL_CIRCLE
             if difference > HALF_CIRCLE:
                 difference = difference - FULL_CIRCLE
-            return Angle.from_seconds(difference)
+            return Angle(seconds=difference)
         return Azimuth(seconds=self._seconds - other.to_seconds())
 
     def __eq__(self, other):
