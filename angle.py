@@ -22,6 +22,14 @@ class Angle:
             degrees * SECONDS_IN_DEGREE + minutes * SECONDS_IN_MINUTE + seconds
         )
 
+    def from_seconds(total_seconds):
+        """Tworzy kąt z całkowitej liczby sekund kątowych.
+
+        Nie ma parametru self, więc wołamy ją przez klasę:
+        Angle.from_seconds(5400).
+        """
+        return Angle(seconds=total_seconds)
+
     def to_seconds(self):
         """Zwraca kąt jako całkowitą liczbę sekund kątowych."""
         return self._seconds
@@ -54,8 +62,3 @@ class Angle:
         minutes = (total % SECONDS_IN_DEGREE) // SECONDS_IN_MINUTE
         seconds = total % SECONDS_IN_MINUTE
         return f"{sign}{degrees}°{minutes:02d}'{seconds:02d}\""
-
-
-def from_seconds(total_seconds):
-    """Tworzy kąt (Angle) z całkowitej liczby sekund kątowych."""
-    return Angle(seconds=total_seconds)
