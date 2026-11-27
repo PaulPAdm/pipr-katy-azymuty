@@ -7,6 +7,9 @@ from angle import Angle
 FULL_CIRCLE = 360 * 3600  # pełny obrót w sekundach kątowych
 HALF_CIRCLE = FULL_CIRCLE // 2
 
+COMPASS_POINTS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
+COMPASS_SECTOR = FULL_CIRCLE // len(COMPASS_POINTS)  # 45° w sekundach
+
 
 @total_ordering
 class Azimuth:
@@ -22,6 +25,16 @@ class Azimuth:
     def to_seconds(self):
         """Zwraca azymut jako całkowitą liczbę sekund kątowych."""
         return self._seconds
+
+    def to_compass(self):
+        """Zwraca najbliższy z ośmiu kierunków róży wiatrów (N, NE, E, ...).
+
+        Każdy kierunek obejmuje sektor 45° wyśrodkowany na kierunku głównym,
+        np. N to [337°30', 360°) oraz [0°, 22°30'). Granica sektora należy
+        do kolejnego sektora (zgodnie z ruchem wskazówek zegara).
+        """
+        index = (self._seconds + COMPASS_SECTOR // 2) // COMPASS_SECTOR
+        return COMPASS_POINTS[index % len(COMPASS_POINTS)]
 
     def __add__(self, other):
         if not isinstance(other, Angle):

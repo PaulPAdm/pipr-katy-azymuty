@@ -175,5 +175,49 @@ class TestAzimuthComparison(unittest.TestCase):
             Azimuth(10) < Angle(20)
 
 
+class TestAzimuthToCompass(unittest.TestCase):
+    def test_main_directions(self):
+        expected = {
+            0: "N", 45: "NE", 90: "E", 135: "SE",
+            180: "S", 225: "SW", 270: "W", 315: "NW",
+        }
+        for degrees, name in expected.items():
+            with self.subTest(degrees=degrees):
+                self.assertEqual(Azimuth(degrees).to_compass(), name)
+
+    def test_example_from_task(self):
+        self.assertEqual(Azimuth(130).to_compass(), "SE")
+
+    def test_north_on_both_sides_of_zero(self):
+        self.assertEqual(Azimuth(350).to_compass(), "N")
+        self.assertEqual(Azimuth(10).to_compass(), "N")
+        self.assertEqual(Azimuth(359, 59, 59).to_compass(), "N")
+
+    def test_sector_boundaries(self):
+        # Granica sektora należy do następnego sektora (zgodnie z zegarem).
+        cases = [
+            (Azimuth(22, 29, 59), "N"), (Azimuth(22, 30), "NE"),
+            (Azimuth(67, 29, 59), "NE"), (Azimuth(67, 30), "E"),
+            (Azimuth(112, 29, 59), "E"), (Azimuth(112, 30), "SE"),
+            (Azimuth(157, 29, 59), "SE"), (Azimuth(157, 30), "S"),
+            (Azimuth(202, 29, 59), "S"), (Azimuth(202, 30), "SW"),
+            (Azimuth(247, 29, 59), "SW"), (Azimuth(247, 30), "W"),
+            (Azimuth(292, 29, 59), "W"), (Azimuth(292, 30), "NW"),
+            (Azimuth(337, 29, 59), "NW"), (Azimuth(337, 30), "N"),
+        ]
+        for azimuth, name in cases:
+            with self.subTest(azimuth=str(azimuth)):
+                self.assertEqual(azimuth.to_compass(), name)
+
+    def test_after_wrapping(self):
+        self.assertEqual((Azimuth(300) + Angle(100)).to_compass(), "NE")
+        self.assertEqual((Azimuth(20) - Angle(45)).to_compass(), "NW")
+
+    def test_returns_string_from_known_set(self):
+        allowed = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
+        for seconds in range(0, 360 * 3600, 5003):
+            self.assertIn(Azimuth(seconds=seconds).to_compass(), allowed)
+
+
 if __name__ == "__main__":
     unittest.main()
